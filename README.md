@@ -10,3 +10,9 @@ The game is then played normally with each player taking turns to place down car
 Calling ohno must be done manually by each player.
 
 The computer player will call this as necessary only a percentage of the time, so the human player CAN trip the computer up if it isn't called.
+
+## Iteration 1
+- Playable through the command line following typical uno rules
+
+##Iteration 2
+- Playable with a GUI using JavaFX
