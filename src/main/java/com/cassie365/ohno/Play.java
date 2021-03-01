@@ -1,7 +1,17 @@
 package com.cassie365.ohno;
 
+import com.cassie365.ohno.flavors.Game;
+import com.cassie365.ohno.flavors.OhNo;
+
+/**
+ * Game Runner
+ */
 public class Play {
     public static void main(String[] args) {
-        System.out.println("Wooooo");
+        Player player1 = new Player("Cassie");
+        Player player2 = new Player("John");
+        Player[] players = {player1,player2};
+
+        Game game = new OhNo(players);
     }
 }
