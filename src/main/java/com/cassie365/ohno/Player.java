@@ -39,7 +39,7 @@ public class Player {
     /**
      * Recieve cards from the game
      */
-    public void addCards(Card card){
+    public void addCard(Card card){
             hand.add(card);
     }
 }

@@ -6,7 +6,17 @@ package com.cassie365.ohno.objects;
  */
 public class Card {
     private String text;
+    private String color;
+    private int value;
 
+    public Card(String text, String color, int value){
+        this.text = text;
+        this.color = color;
+        this.value = value;
+    }
 
+    public String toString(){
+        return text+" "+color+" "+value;
+    }
 
 }
