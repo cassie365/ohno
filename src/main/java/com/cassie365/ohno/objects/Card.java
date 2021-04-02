@@ -15,8 +15,32 @@ public class Card {
         this.value = value;
     }
 
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public int getValue() {
+        return value;
+    }
+
+    public void setValue(int value) {
+        this.value = value;
+    }
+
     public String toString(){
-        return text+" "+color+" "+value;
+        return color+" "+text;
     }
 
 }

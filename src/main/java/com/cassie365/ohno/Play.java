@@ -17,12 +17,6 @@ public class Play {
         Player[] players = {player1,player2};
 
         Game game = new OhNo(players);
-
-        DeckInitializer d = new DeckInitializer();
-        Deque<Card> dd = d.generateArrayDequeCards();
-
-        for(Card x : dd){
-            System.out.println(x.toString());
-        }
+        game.start();
     }
 }
