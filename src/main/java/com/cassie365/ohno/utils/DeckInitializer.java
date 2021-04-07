@@ -11,7 +11,7 @@ import java.util.*;
 public class DeckInitializer {
     private String[] colors = {"Red","Yellow","Green","Blue"};
     private String[] colorCards = {"0","1","2","3","4","5","6","7","8","9","Reverse","Skip","Draw 2"};
-    private int[] values = {0,1,2,3,4,5,6,7,8,9,-1,-1,-1};
+    private int[] values = {0,1,2,3,4,5,6,7,8,9,-1,-2,-3};
     private int[] numKinds = {1,2,2,2,2,2,2,2,2,2,2,2,2};
 
     public Deque<Card> generateArrayDequeCards(){

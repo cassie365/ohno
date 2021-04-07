@@ -1,4 +1,4 @@
-package com.cassie365.ohno;
+package com.cassie365.ohno.objects;
 
 
 import com.cassie365.ohno.objects.Card;

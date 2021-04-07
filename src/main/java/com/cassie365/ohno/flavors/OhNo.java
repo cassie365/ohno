@@ -1,7 +1,6 @@
 package com.cassie365.ohno.flavors;
 
-import com.cassie365.ohno.Play;
-import com.cassie365.ohno.Player;
+import com.cassie365.ohno.objects.Player;
 import com.cassie365.ohno.objects.Card;
 import com.cassie365.ohno.utils.DeckInitializer;
 
@@ -21,8 +20,6 @@ public class OhNo implements Game {
     private Deque<Card> discard = new ArrayDeque<Card>();
     private Deque<Card> draw = new ArrayDeque<Card>();
 
-    boolean isReversed = false;
-
 
     public OhNo(Player[] players){
         this.players.addAll(Arrays.asList(players));
@@ -34,33 +31,36 @@ public class OhNo implements Game {
     @Override
     public void start(){
         setup();
+        Card lastTop = null;
 
-        while(!draw.isEmpty()){
+        play: while(!draw.isEmpty()){
             //Remove player from top of stack
-            Player player = playOrder.pop();
+            Player player = nextPlayer();
+
             //ANy gameplay effects occur (Draw, skip)
             Card card = discard.peek();
 
-            switch(card.getText()){
-                case "Reverse":
-                    reverse();
-                    break;
-                case "Skip":
-                    skip();
-                    break;
-                case "Draw 2":
-                    draw(player,2);
-                    break;
-                case "Wild +4":
-                    draw(player, 4);
-                    break;
+            if(card!=lastTop){
+                System.out.println("New Card");
+                lastTop = card;
+                switch(card.getText()){
+                    case "Reverse":
+                        reverse();
+                        break;
+                    case "Skip":
+                        System.out.println("Skipping "+player.getName());
+                        continue play;
+                    case "Draw 2":
+                        draw(player,2);
+                        break;
+                    case "Wild +4":
+                        draw(player, 4);
+                        break;
+                }
             }
 
             //Player is given control and place cards
             startTurn(player,card);
-
-            //PLayer then chooses when to return control
-            playOrder.offer(player);
         }
     }
 
@@ -87,13 +87,19 @@ public class OhNo implements Game {
      * Reverse play order
      */
     public void reverse(){
-        isReversed = !isReversed;
+        Deque<Player> players = new ArrayDeque<Player>();
+        Iterator<Player> i = playOrder.descendingIterator();
+        while(i.hasNext()){
+            players.offer(playOrder.pop());
+        }
+        playOrder = players;
     }
 
     /**
      * Draw cards and give card to player
      */
     public void draw(Player player,int num){
+        System.out.println("Drawing "+num+" for "+player.getName());
         for(int i = 0; i<num; i++){
             player.addCard(draw.pop());
         }
@@ -102,8 +108,11 @@ public class OhNo implements Game {
     /**
      * Removes next player and places at bottom of queue
      */
-    public void skip(){
-        playOrder.offer(playOrder.pop());
+    public Player nextPlayer(){
+        Player p = playOrder.pop();
+        System.out.println("Removed "+p.getName()+" from top of stack");
+        playOrder.offer(p);
+        return p;
     }
 
     public void play(Player player, int card){
@@ -118,7 +127,9 @@ public class OhNo implements Game {
         for(Card c:player.getHand()){
             if(c.getValue() >=0 && c.getValue()+1 == top.getValue() || c.getValue()-1 == top.getValue())
                 playable.add(c);
-            else if (c.getColor() == top.getColor())
+            else if (c.getValue() == top.getValue())
+                playable.add(c);
+            else if (c.getColor().equals(top.getColor()))
                 playable.add(c);
         }
 
