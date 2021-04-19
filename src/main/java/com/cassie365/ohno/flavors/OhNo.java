@@ -3,6 +3,8 @@ package com.cassie365.ohno.flavors;
 import com.cassie365.ohno.objects.Player;
 import com.cassie365.ohno.objects.Card;
 import com.cassie365.ohno.utils.DeckInitializer;
+import org.apache.log4j.Logger;
+import org.apache.log4j.Priority;
 
 import java.util.*;
 
@@ -11,6 +13,7 @@ import java.util.*;
  * Follows same rules as UNO
  */
 public class OhNo implements Game {
+    private final Logger logger = Logger.getLogger(Game.class);
     private final int HAND_SIZE = 7;
 
     Scanner scanner = new Scanner(System.in);
@@ -30,6 +33,7 @@ public class OhNo implements Game {
      */
     @Override
     public void start(){
+        logger.info("Started Game");
         setup();
         Card lastTop = null;
 
@@ -41,7 +45,6 @@ public class OhNo implements Game {
             Card card = discard.peek();
 
             if(card!=lastTop){
-                System.out.println("New Card");
                 lastTop = card;
                 switch(card.getText()){
                     case "Reverse":
@@ -78,7 +81,7 @@ public class OhNo implements Game {
 
         //Pop 7 cards to all players
         for(Player p : players){
-            draw(p,7);
+            draw(p,HAND_SIZE);
             playOrder.push(p);
         }
     }
@@ -110,7 +113,6 @@ public class OhNo implements Game {
      */
     public Player nextPlayer(){
         Player p = playOrder.pop();
-        System.out.println("Removed "+p.getName()+" from top of stack");
         playOrder.offer(p);
         return p;
     }
