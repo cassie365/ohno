@@ -1,5 +1,7 @@
 package com.cassie365.ohno;
 
+import com.cassie365.ohno.exceptions.LessThanMinimumPlayersException;
+import com.cassie365.ohno.exceptions.MaxPlayersExceededException;
 import com.cassie365.ohno.flavors.Game;
 import com.cassie365.ohno.flavors.OhNo;
 import com.cassie365.ohno.objects.Player;
@@ -13,7 +15,12 @@ public class Play {
         Player player2 = new Player("John");
         Player[] players = {player1,player2};
 
-        Game game = new OhNo(players);
-        game.start();
+        try{
+            Game game = new OhNo(players);
+            game.start();
+        }
+        catch (MaxPlayersExceededException | LessThanMinimumPlayersException e) {
+            e.printStackTrace();
+        }
     }
 }

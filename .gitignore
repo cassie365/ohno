@@ -2,3 +2,5 @@
 *.iml
 target/
 game-sprites/
+logs/
+*.log

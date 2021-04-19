@@ -1,4 +1,4 @@
-package com.cassie365.ohno.objects;
+package com.cassie365.ohno;
 
 import org.junit.Test;
 
