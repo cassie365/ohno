@@ -115,12 +115,10 @@ public class OhNo implements Game {
      */
     public void reverse(){
         logger.info("Reversed play order, size "+playOrder.size());
-        Deque<Player> players = new ArrayDeque<Player>();
-        Iterator<Player> i = playOrder.descendingIterator();
-        while(i.hasNext()){
-            players.offer(i.next());
-        }
-        playOrder = players;
+        Player[] p = new Player[10];
+        List<Player> players = Arrays.asList(playOrder.toArray(p));
+        Collections.reverse(players);
+        playOrder = new ArrayDeque<>(players);
     }
 
     /**
