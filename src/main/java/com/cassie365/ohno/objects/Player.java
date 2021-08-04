@@ -13,9 +13,11 @@ import java.util.List;
 public class Player {
     private List<Card> hand;
     private String name;
+    private boolean isBot;
 
-    public Player(String name){
+    public Player(String name, boolean isBot){
         this.name = name;
+        this.isBot = isBot;
         hand = new ArrayList<Card>();
     }
 
@@ -38,6 +40,14 @@ public class Player {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public boolean isBot() {
+        return isBot;
+    }
+
+    public void setBot(boolean bot) {
+        isBot = bot;
     }
 
     /**

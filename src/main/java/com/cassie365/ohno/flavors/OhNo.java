@@ -1,5 +1,6 @@
 package com.cassie365.ohno.flavors;
 
+import com.cassie365.ohno.Play;
 import com.cassie365.ohno.exceptions.LessThanMinimumPlayersException;
 import com.cassie365.ohno.exceptions.MaxPlayersExceededException;
 import com.cassie365.ohno.objects.Player;
@@ -26,6 +27,7 @@ public class OhNo implements Game {
     private List<Player> players = new ArrayList();
     private Deque<Player> playOrder = new ArrayDeque<Player>();
     private Deque<Card> discard = new ArrayDeque<Card>();
+    private Deque<Card> inPlay = new ArrayDeque<Card>(1);
     private Deque<Card> draw = new ArrayDeque<Card>();
 
 
@@ -44,7 +46,6 @@ public class OhNo implements Game {
     public void start(){
         logger.info("Started Game");
         setup();
-        Card lastTop = null;
 
         play: while(!draw.isEmpty()){
             turns++;
@@ -54,16 +55,12 @@ public class OhNo implements Game {
             Player player = nextPlayer();
 
             //ANy gameplay effects occur (Draw, skip)
-            Card card = discard.peek();
+            Card card = inPlay.pop();
 
-            String s = lastTop!=null?lastTop.toString():"null";
-            logger.info("Last card placed = "+s+" = "+card.toString());
-
-            if(card!=lastTop){
-                lastTop = card;
+            if(card!=null){
                 switch(card.getText()){
                     case "Reverse":
-                        if(turns == 1) //Shitty workaround in case the first card drawn is a reverse as it doesn't make sense to reverse if play has just started/
+                        if(turns == 1)
                             break;
                         logger.info("Reversing...");
                         reverse();
@@ -85,6 +82,8 @@ public class OhNo implements Game {
             else
                 logger.info("Last card matches, resuming without preliminary steps");
 
+            discard.push(card);
+
             //Player is given control and place cards
             startTurn(player,card);
         }
@@ -101,7 +100,7 @@ public class OhNo implements Game {
         logger.info("DECK INITIALIZED WITH "+draw.size());
 
         //Pop first card and place into discard pile
-        discard.push(draw.pop());
+        inPlay.push(draw.pop());
 
         //Pop 7 cards to all players
         for(Player p : players){
@@ -152,17 +151,16 @@ public class OhNo implements Game {
 
     }
 
-    public List<Card> getPlayable(Player player, Card top){
-        List<Card> playable = new ArrayList<>();
-        for(Card c:player.getHand()){
-            if(c.getValue() >=0 && c.getValue()+1 == top.getValue() || c.getValue()-1 == top.getValue())
-                playable.add(c);
-            else if (c.getValue() == top.getValue())
-                playable.add(c);
-            else if (c.getColor().equals(top.getColor()))
-                playable.add(c);
+    public List<Integer> getPlayable(Player player, Card top){
+        List<Integer> playable = new ArrayList<>();
+        Card[] hand = (Card[]) player.getHand().toArray();
+        for(int i = 0; i<hand.length; i++){
+            if(hand[i].getValue()+1 == top.getValue() ||
+                    hand[i].getValue()-1 == top.getValue() ||
+                    hand[i].getColor() == top.getColor()){
+                playable.add(i);
+            }
         }
-
         return playable;
     }
 
@@ -186,10 +184,36 @@ public class OhNo implements Game {
     }
 
     public void startTurn(Player player, Card top){
-        showTop();
+        //Show the top card
+
+        //Get playable cards
+        List<Card> playable = getPlayable(player, top);
+
+        //If no playable cards, draw 1
+        if(!playable.isEmpty()){
+            draw(player,1);
+            playable = getPlayable(player,top);
+            //If no playable cards after drawing, return.
+            if(playable.isEmpty())
+                return;
+        }
+
+        //Allow player to choose the next card to play
+
+
+    }
+
+    public void getPlayerMove(Player player){
+        //If is a bot, randomly select a card that can be played
+        if(player.isBot()){
+
+        }else{
+
+        }
+    }
+
+    public List<Card> getPlayable(Player player, Card top){
         List<Card> playable = new ArrayList<>();
-        System.out.println("Player: "+player.getName());
-        System.out.println("Currently Playable");
         if(top.getColor() == "Wild") {
             playable.addAll(player.getHand());
             showPlayable(player,playable);
@@ -214,7 +238,9 @@ public class OhNo implements Game {
                 showPlayable(player,playable);
             }
         }
+    }
 
+    public void getPlayerInput(Player player, Card){
         boolean end = false;
         while(!end){
             System.out.print("Your Selection: ");
