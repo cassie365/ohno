@@ -11,8 +11,8 @@ import com.cassie365.ohno.objects.Player;
  */
 public class Play {
     public static void main(String[] args) {
-        Player player1 = new Player("Cassie");
-        Player player2 = new Player("John");
+        Player player1 = new Player("Cassie",false);
+        Player player2 = new Player("John",false);
         Player[] players = {player1,player2};
 
         try{

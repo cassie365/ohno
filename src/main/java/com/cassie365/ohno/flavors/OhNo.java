@@ -1,13 +1,13 @@
 package com.cassie365.ohno.flavors;
 
-import com.cassie365.ohno.Play;
 import com.cassie365.ohno.exceptions.LessThanMinimumPlayersException;
 import com.cassie365.ohno.exceptions.MaxPlayersExceededException;
 import com.cassie365.ohno.objects.Player;
 import com.cassie365.ohno.objects.Card;
 import com.cassie365.ohno.utils.DeckInitializer;
-import org.apache.log4j.Logger;
-import org.apache.log4j.Priority;
+import org.apache.logging.log4j.LogBuilder;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 
@@ -16,7 +16,7 @@ import java.util.*;
  * Follows same rules as UNO
  */
 public class OhNo implements Game {
-    private final Logger logger = Logger.getLogger(Game.class);
+    private Logger logger = LogManager.getLogger(Game.class);
     private final int HAND_SIZE = 7;
     private final int MAX_PLAYERS = 10;
     private final int MIN_PLAYERS = 2;
@@ -151,7 +151,7 @@ public class OhNo implements Game {
 
     }
 
-    public List<Integer> getPlayable(Player player, Card top){
+    public List<Integer> getPlayableCards(Player player, Card top){
         List<Integer> playable = new ArrayList<>();
         Card[] hand = (Card[]) player.getHand().toArray();
         for(int i = 0; i<hand.length; i++){
